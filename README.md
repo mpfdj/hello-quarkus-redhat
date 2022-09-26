@@ -7,10 +7,10 @@ https://www.graalvm.org/java/quickstart/
 docker run -ti -p 8080:8080 -v "C:/Users/TO11RC/OneDrive - ING/miel/workspace/Java/quarkus/quarkus-tutorial:/work" quay.io/rhdevelopers/tutorial-tools:0.0.4 bash
 
 # Run project
-mvn clean compile quarkus:dev
+mvnw.cmd clean compile -DskipTests quarkus:dev
 
 # Create project
-mvn "io.quarkus:quarkus-maven-plugin:create" \
+mvnw.cmd "io.quarkus:quarkus-maven-plugin:create" \
 -DprojectGroupId="com.redhat.developers" \
 -DprojectArtifactId="hello-quarkus-redhat" \
 -DprojectVersion="1.0.0-SNAPSHOT" \
@@ -27,9 +27,6 @@ https://github.com/quarkusio/quarkus/issues/10227
 
 
 
-
-
-
 token=$(curl https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tutorial/master/jwt-token/quarkus.jwt.token -s)
 curl -H "Authorization: Bearer $token" localhost:8080/secure/claim
 
@@ -38,15 +35,84 @@ token=$(curl https://raw.githubusercontent.com/redhat-developer-demos/quarkus-tu
 curl -v -H "Authorization: Bearer $token" localhost:8080/secure/claim
 
 
+# https://redhat-developer-demos.github.io/quarkus-tutorial/quarkus-tutorial/security-oidc.html
+# First you need a token valid to authenticate. Run the following command to obtain an access token
+# On Windows use double quotes
+curl -X POST "http://localhost:64729/realms/quarkus/protocol/openid-connect/token" -H "Content-Type: application/x-www-form-urlencoded" -d "username=jdoe" -d "password=jdoe" -d "grant_type=password" -d "client_id=admin-cli"
+
+
+# Online JWT debugger
+https://jwt.io/
+
+
+# user_info.sh
+token=$(curl -X POST 'http://localhost:64729/realms/quarkus/protocol/openid-connect/token' \
+-H "Content-Type: application/x-www-form-urlencoded" \
+-d "username=jdoe" \
+-d 'password=jdoe' \
+-d 'grant_type=password' \
+-d 'client_id=admin-cli' | jq -r '.access_token')
+
+curl -H "Authorization: Bearer $token" localhost:8080/api/users/info
+
+
+
+# https://www.keycloak.org/getting-started/getting-started-docker
+
+# Pull image and run keycloak container (run once)
+docker run --name keycloak -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin -p 8180:8080 quay.io/keycloak/keycloak:19.0.2 start-dev
+docker run --name keycloak -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin --volume "C:/Users/TO11RC/OneDrive - ING/miel/workspace/Java/hello-quarkus-redhat:/tmp/hello-quarkus-redhat" -p 8180:8080 quay.io/keycloak/keycloak:19.0.2 start-dev
+
+# Start existing container
+docker start keycloak
+
+# Keycloak web gui
+http://localhost:8180/admin
+http://localhost:8180/realms/myrealm/account
+http://localhost:8180/realms/quarkus/account
+
+# Remove container
+docker container stop <CONTAINER ID>
+docker ps -a
+docker rm <CONTAINER ID>
+
+# Create a bash session
+docker exec -it keycloak /bin/bash
+
+
+
+
+docker image build --no-cache --file keycloak.dockerfile --tag keycloak .
+docker container run --name keycloak --privileged -p 8180:8080 keycloak
 
 
 
 
 
 
+https://tomas-pinto.medium.com/keycloak-clients-and-roles-a-tutorial-b334147f1dbd
 
 
 
+
+
+
+# Client secret not provided in request
+# https://groups.google.com/g/keycloak-user/c/EbMW739c9vI
+# In the Keycloak's Client configuration page use Access Type as public.
+
+{
+"error": "unauthorized_client",
+"error_description": "Client secret not provided in request"
+}
+
+
+
+
+
+
+# Client
+Valid Redirect URIs specify *
 
 
 
