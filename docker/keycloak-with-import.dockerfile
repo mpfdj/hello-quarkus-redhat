@@ -5,10 +5,10 @@
 FROM quay.io/keycloak/keycloak:19.0.2
 
 # Make the realm configuration available for import
-COPY quarkus-realm.json /opt/keycloak_import/
+COPY quarkus-realm-from-redhat-site.json /opt/keycloak_import/
 
 # Import the realm and user
-RUN /opt/keycloak/bin/kc.sh import --file /opt/keycloak_import/quarkus-realm.json
+RUN /opt/keycloak/bin/kc.sh import --file /opt/keycloak_import/quarkus-realm-from-redhat-site.json
 
 # Set environment variables
 ENV KEYCLOAK_ADMIN=admin

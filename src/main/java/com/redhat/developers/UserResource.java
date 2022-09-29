@@ -7,6 +7,7 @@ import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import java.util.stream.Collectors;
 
 @Path("api/users")
 public class UserResource {
@@ -19,10 +20,10 @@ public class UserResource {
 
     @GET
     @Path("info")
-//    @RolesAllowed("Subscriber")
-//    @RolesAllowed("manager")
     @RolesAllowed({"Subscriber", "manager"})
     public String getInfo() {
+        log.info("Printing JWT claimNames: " + jwt.getClaimNames().stream().sorted().collect(Collectors.toList()));
+        log.info("Printing JWT address claim: " + jwt.getClaim("address"));
         log.info("Printing JWT: " + jwt.toString());
         return "Access for subject " + jwt.getName() + " is granted";
     }

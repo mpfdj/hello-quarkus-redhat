@@ -45,23 +45,20 @@ curl -X POST "http://localhost:64729/realms/quarkus/protocol/openid-connect/toke
 https://jwt.io/
 
 
-# user_info.sh
-token=$(curl -X POST 'http://localhost:64729/realms/quarkus/protocol/openid-connect/token' \
--H "Content-Type: application/x-www-form-urlencoded" \
--d "username=jdoe" \
--d 'password=jdoe' \
--d 'grant_type=password' \
--d 'client_id=admin-cli' | jq -r '.access_token')
-
-curl -H "Authorization: Bearer $token" localhost:8080/api/users/info
-
-
 
 # https://www.keycloak.org/getting-started/getting-started-docker
 
 # Pull image and run keycloak container (run once)
 docker run --name keycloak -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin -p 8180:8080 quay.io/keycloak/keycloak:19.0.2 start-dev
 docker run --name keycloak -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin --volume "C:/Users/TO11RC/OneDrive - ING/miel/workspace/Java/hello-quarkus-redhat:/tmp/hello-quarkus-redhat" -p 8180:8080 quay.io/keycloak/keycloak:19.0.2 start-dev
+
+# Docker build image, run container (might run it with --privileged flag) and connect to container
+docker image build --no-cache --file keycloak-simple.dockerfile --tag keycloak .
+docker container run -p 8180:8080 keycloak
+docker exec -it <CONTAINER ID> /bin/bash
+
+
+
 
 # Start existing container
 docker start keycloak
