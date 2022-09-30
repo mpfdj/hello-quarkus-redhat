@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Using keycloak docker image
-token=$(curl -X POST 'http://localhost:8180/realms/quarkus/protocol/openid-connect/token' \
+token=$(cmd.exe /c curl -X POST 'http://localhost:8180/realms/quarkus/protocol/openid-connect/token' \
 -H "Content-Type: application/x-www-form-urlencoded" \
 -d "username=miel" \
 -d 'password=miel' \
@@ -11,7 +11,7 @@ token=$(curl -X POST 'http://localhost:8180/realms/quarkus/protocol/openid-conne
 
 
 # Change port number, using embedded keycloak server here...
-#token=$(curl -X POST 'http://localhost:60601/realms/quarkus/protocol/openid-connect/token' \
+#token=$(cmd.exe /c curl -X POST 'http://localhost:60601/realms/quarkus/protocol/openid-connect/token' \
 #-H "Content-Type: application/x-www-form-urlencoded" \
 #-d "username=jdoe" \
 #-d 'password=jdoe' \

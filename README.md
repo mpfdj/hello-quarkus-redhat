@@ -57,7 +57,8 @@ docker image build --no-cache --file keycloak-simple.dockerfile --tag keycloak .
 docker container run -p 8180:8080 keycloak
 docker exec -it <CONTAINER ID> /bin/bash
 
-
+docker exec -it <CONTAINER ID> /opt/keycloak/bin/kc.sh export --dir /tmp --users realm_files
+docker exec -it eea /opt/keycloak/bin/kc.sh export --dir /tmp --users realm_files
 
 
 # Start existing container
