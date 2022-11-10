@@ -1,3 +1,6 @@
+# Deploy Native Application to Kubernetes (Minikube)
+https://htl-leonding-college.github.io/quarkus-lecture-notes/kubernetes-minikube.html
+
 # Quarkus tutorial
 https://redhat-developer-demos.github.io/quarkus-tutorial/quarkus-tutorial/index.html
 https://github.com/redhat-developer-demos/quarkus-tutorial
