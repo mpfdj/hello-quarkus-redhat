@@ -1,3 +1,6 @@
+# CONFIGURE YOUR APPLICATION
+https://code.quarkus.io/
+
 # Deploy Native Application to Kubernetes (Minikube)
 https://htl-leonding-college.github.io/quarkus-lecture-notes/kubernetes-minikube.html
 
